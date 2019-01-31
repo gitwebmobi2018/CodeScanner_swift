@@ -47,9 +47,19 @@ struct Code: Codable {
         try container.encode(date, forKey: .date)
     }
     
-    func getDateString() -> String {
+    private func getTimeString() -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HH:mm"
         return dateFormatter.string(from: date)
+    }
+    
+    func getDateString() -> String {
+        if !isArchive {
+            return getTimeString()
+        }
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yyyy"
+        let dateString = dateFormatter.string(from: date)
+        return dateString + "\n" + getTimeString()
     }
 }

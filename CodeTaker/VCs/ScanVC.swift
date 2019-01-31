@@ -27,7 +27,7 @@ class ScanVC: UIViewController {
     @IBOutlet weak var flashSwitch: UISwitch!
     @IBOutlet weak var tableView: UITableView!
     
-    private var results: [Code] = []
+    private var results: [String] = []
     
     var delegate : ScanVCDelegate?
     
@@ -41,8 +41,13 @@ class ScanVC: UIViewController {
     }
     
     func updateResults() {
-        results = DataManager.shared.getLatestCodes()
         tableView.reloadData()
+    }
+    
+    func addResult(_ result: String) {
+        if !results.contains(result) {
+            results.insert(result, at: 0)
+        }
     }
     
     func configureScanner() {
@@ -81,6 +86,7 @@ class ScanVC: UIViewController {
         }
         delegate?.didScanned(result: result)
         setStatusLbl(result, scanner: .scanned)
+        addResult(result)
         updateResults()
     }
     
@@ -145,7 +151,7 @@ extension ScanVC: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ScanedResultCell", for: indexPath)
-        cell.textLabel?.text = results[indexPath.row].code
+        cell.textLabel?.text = results[indexPath.row]
         return cell
     }
     
