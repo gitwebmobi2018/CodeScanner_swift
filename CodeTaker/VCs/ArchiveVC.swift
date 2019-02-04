@@ -118,6 +118,17 @@ extension ArchiveVC {
         present(alert, animated: true, completion: nil)
     }
     
+    @IBAction func onSelectAllBtn(_ sender: Any) {
+        codes.lazy.forEach { (item) in
+            var temp = item
+            temp.isChecked = true
+            if let index = codes.index(where: { $0.date == item.date && $0.code == item.code }) {
+                codes[index] = temp
+                DataManager.shared.updateCode(temp)
+            }
+        }
+    }
+    
 }
 
 extension ArchiveVC: CodeCellDelegate {
@@ -125,8 +136,8 @@ extension ArchiveVC: CodeCellDelegate {
     func didChecked(selected item: Code) -> Bool {
         let selectedVals = codes.filter{ $0.isChecked }
         print(selectedVals.count)
-        if selectedVals.count >= 8 && item.isChecked {
-            let alert = UIAlertController(title: nil, message: "Maximum 8 items", preferredStyle: .alert)
+        if selectedVals.count >= 10 && item.isChecked {
+            let alert = UIAlertController(title: nil, message: "Maximum 10 items", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             present(alert, animated: true, completion: nil)
             return false

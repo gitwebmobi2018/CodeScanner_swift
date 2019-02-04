@@ -393,7 +393,13 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="BMQ-9t-K0G"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Archive" id="M6e-z1-2Ub"/>
+                    <navigationItem key="navigationItem" title="Archive" id="M6e-z1-2Ub">
+                        <barButtonItem key="rightBarButtonItem" title="Select all" id="lex-uF-YJj">
+                            <connections>
+                                <action selector="onSelectAllBtn:" destination="aFM-Ya-TUq" id="nh8-EG-JQh"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="deleteBtn" destination="was-2j-g1r" id="PbW-x2-GVB"/>
                         <outlet property="noCodesLbl" destination="624-Vh-NSC" id="G1v-ej-llh"/>
