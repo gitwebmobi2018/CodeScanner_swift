@@ -38,6 +38,18 @@ class ScanVC: UIViewController {
         
         configureScanner()
         updateResults()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(willResignActive), name: UIApplication.willResignActiveNotification, object: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self, name: UIApplication.willResignActiveNotification, object: nil)
+    }
+    
+    @objc func willResignActive() {
+        flashSwitch.setOn(false, animated: false)
     }
     
     func updateResults() {
@@ -113,18 +125,18 @@ class ScanVC: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func toggleFlashSwitch() {
-        toggleFlash()
+    @IBAction func toggleFlashSwitch(_ sender: Any) {
+        toggleFlash(isOn: flashSwitch.isOn)
     }
     
-    func toggleFlash() {
+    func toggleFlash(isOn: Bool) {
         guard let device = AVCaptureDevice.default(for: AVMediaType.video) else { return }
         guard device.hasTorch else { return }
         
         do {
             try device.lockForConfiguration()
             
-            if (device.torchMode == AVCaptureDevice.TorchMode.on) {
+            if !isOn {
                 device.torchMode = AVCaptureDevice.TorchMode.off
             } else {
                 do {

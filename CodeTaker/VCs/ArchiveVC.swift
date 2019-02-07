@@ -14,6 +14,7 @@ class ArchiveVC: UIViewController {
     @IBOutlet weak var sendBtn: UIBarButtonItem!
     @IBOutlet weak var deleteBtn: UIBarButtonItem!
     @IBOutlet weak var noCodesLbl: UILabel!
+    @IBOutlet weak var selectAllBtn : UIBarButtonItem!
     
     private var codes: [Code] = [] {
         didSet {
@@ -38,8 +39,25 @@ extension ArchiveVC {
         tableView.isHidden = codes.isEmpty
         
         let selectedVals = codes.filter{ $0.isChecked }
-        sendBtn.isEnabled = !selectedVals.isEmpty
+        if selectedVals.count > 10 || selectedVals.isEmpty {
+            sendBtn.isEnabled = false
+        } else {
+            sendBtn.isEnabled = true
+        }
+        
         deleteBtn.isEnabled = !selectedVals.isEmpty
+        
+        setSelectAllButtonTitle()
+    }
+    
+    func setSelectAllButtonTitle() {
+        let selectedVals1 = codes.filter{ $0.isChecked }
+        if selectedVals1.count == 0 {
+            selectAllBtn.title = "Select all"
+        }
+        if selectedVals1.count == codes.count {
+            selectAllBtn.title = "Deselect all"
+        }
     }
     
     func deleteCodes() {
@@ -48,6 +66,9 @@ extension ArchiveVC {
             DataManager.shared.deleteCode($0)
         }
         codes = DataManager.shared.getArchiveCodes()
+        if selectAllBtn.title == "Deselect all" {
+            selectAllBtn.title = "Select all"
+        }
         tableView.reloadData()
     }
     
@@ -67,7 +88,6 @@ extension ArchiveVC {
         print(result)
         return result
     }
-    
 }
 
 extension ArchiveVC {
@@ -119,13 +139,30 @@ extension ArchiveVC {
     }
     
     @IBAction func onSelectAllBtn(_ sender: Any) {
-        codes.lazy.forEach { (item) in
-            var temp = item
-            temp.isChecked = true
-            if let index = codes.index(where: { $0.date == item.date && $0.code == item.code }) {
-                codes[index] = temp
-                DataManager.shared.updateCode(temp)
+        guard codes.count > 0 else {
+            return
+        }
+        let btn = sender as! UIBarButtonItem
+        if btn.title == "Select all" {
+            codes.lazy.forEach { (item) in
+                var temp = item
+                temp.isChecked = true
+                if let index = codes.index(where: { $0.date == item.date && $0.code == item.code }) {
+                    codes[index] = temp
+                    DataManager.shared.updateCode(temp)
+                }
             }
+            btn.title = "Deselect all"
+        } else {
+            codes.lazy.forEach { (item) in
+                var temp = item
+                temp.isChecked = false
+                if let index = codes.index(where: { $0.date == item.date && $0.code == item.code }) {
+                    codes[index] = temp
+                    DataManager.shared.updateCode(temp)
+                }
+            }
+            btn.title = "Select all"
         }
     }
     
@@ -135,7 +172,6 @@ extension ArchiveVC: CodeCellDelegate {
     
     func didChecked(selected item: Code) -> Bool {
         let selectedVals = codes.filter{ $0.isChecked }
-        print(selectedVals.count)
         if selectedVals.count >= 10 && item.isChecked {
             let alert = UIAlertController(title: nil, message: "Maximum 10 items", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
@@ -148,6 +184,7 @@ extension ArchiveVC: CodeCellDelegate {
                 DataManager.shared.updateCode(item)
             }
         }
+        setSelectAllButtonTitle()
         return true
     }
     

@@ -224,7 +224,7 @@
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Ikt-dd-uQv">
                                 <rect key="frame" x="306" y="54" width="51" height="31"/>
                                 <connections>
-                                    <action selector="toggleFlashSwitch" destination="Lct-P1-WNr" eventType="valueChanged" id="dKc-9h-hfp"/>
+                                    <action selector="toggleFlashSwitch:" destination="Lct-P1-WNr" eventType="valueChanged" id="eCz-Jw-2sh"/>
                                 </connections>
                             </switch>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lamp" translatesAutoresizingMaskIntoConstraints="NO" id="yc7-OQ-fp2">
@@ -403,6 +403,7 @@
                     <connections>
                         <outlet property="deleteBtn" destination="was-2j-g1r" id="PbW-x2-GVB"/>
                         <outlet property="noCodesLbl" destination="624-Vh-NSC" id="G1v-ej-llh"/>
+                        <outlet property="selectAllBtn" destination="lex-uF-YJj" id="PUw-Sz-zx5"/>
                         <outlet property="sendBtn" destination="pYl-Ay-ZTn" id="c4e-tH-6dZ"/>
                         <outlet property="tableView" destination="AKT-ZP-1SQ" id="8AX-wy-Vn0"/>
                     </connections>
